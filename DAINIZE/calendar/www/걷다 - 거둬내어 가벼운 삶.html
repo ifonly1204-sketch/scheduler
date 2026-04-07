@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<!-- saved from url=(0022)http://127.0.0.1:5500/ -->
+<html lang="ko" translate="no"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="light">
+    <meta name="color-scheme" content="light dark">
+    <script src="./걷다 - 거둬내어 가벼운 삶_files/firebase-app-compat.js"></script>
+    <script src="./걷다 - 거둬내어 가벼운 삶_files/firebase-auth-compat.js"></script>
+    <script src="./걷다 - 거둬내어 가벼운 삶_files/firebase-firestore-compat.js"></script>
+
+    
+    
+    <title>걷다 - 거둬내어 가벼운 삶</title>
+<link rel="stylesheet" href="./걷다 - 거둬내어 가벼운 삶_files/all.min.css"><link rel="stylesheet" href="./걷다 - 거둬내어 가벼운 삶_files/style.css"></head>
+
+<body>
+    <div class="wrapper">
+        <div class="screen-backdrop">
+        </div>
+
+        <div class="home-screen screen" id="main-page">
+            <div class="head-wrapper">
+                <div class="settings-btn" id="app-settings-btn" onclick="openSettings()">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.592c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127c.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.431l-1.003.827c-.293.24-.438.613.431.992a6.759 6.759 0 010 .255c0 .379.138.752.431.992l1.003.827c.476.393.64 1.03.26 1.431l-1.296 2.247a1.125 1.125 0 01-1.37.49l-1.217-.456c-.355-.133-.75-.072-1.075.124a6.591 6.591 0 01-.22.127c-.332.184-.582.496-.645.87l-.213 1.281c-.09.542-.56.94-1.11.94h-2.592c-.55 0-1.02-.398-1.11-.94l-.213-1.281c-.063-.374-.313-.686-.645-.87a6.523 6.523 0 01-.22-.127c-.324-.196-.72-.257-1.075-.124l-1.217.456a1.125 1.125 0 01-1.37-.49l-1.296-2.247a1.125 1.125 0 01.26-1.431l1.003-.827c.293-.24.431-.613.431-.992a6.759 6.759 0 010-.255c0-.379-.138-.752-.431-.992l-1.003-.827a1.125 1.125 0 01-.26-1.431l1.296-2.247a1.125 1.125 0 011.37-.49l1.217.456c.355.133.75.072 1.075-.124.072-.043.146-.086.22-.127.332-.184.582-.496.645-.87l.213-1.281z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                    </svg>
+                </div>
+                <div id="user-profile-btn" class="profile-link" onclick="openLoginScreen()" style="display: flex;"><div class="profile-img">👤</div></div>
+                <div class="clock-container">
+                    <div class="analog-clock">
+                        <div class="hour-hand" style="transform: translateX(-50%) rotate(320deg);"></div>
+                        <div class="minute-hand" style="transform: translateX(-50%) rotate(245.9deg);"></div>
+                        <div class="second-hand" style="transform: translateX(-50%) rotate(354deg);"></div>
+                        <div class="center-dot"></div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="categories-wrapper">
+                <div class="categories"><div class="category" style="position: relative; background-color: rgb(255, 255, 255); border-radius: 20px; margin-bottom: 15px; padding: 1.5rem 1rem; display: flex; justify-content: space-between; align-items: center; cursor: pointer; border: 1px solid transparent; background-image: linear-gradient(175deg, rgb(255, 255, 255), rgb(255, 255, 255)), linear-gradient(175deg, rgb(255, 255, 255), rgb(255, 255, 255)); background-origin: border-box; background-clip: padding-box, border-box, border-box; box-shadow: rgba(5, 38, 89, 0.8) 0px 0px 0px; overflow: hidden;">
+      <div class="left" style="position: relative; z-index: 4; display: flex; align-items: center;">
+        <div style="width: 30px; height: 30px; border-radius: 20px; color: #; box-sizing:border-box; padding: 1px !important; margin-right: 15px; box-shadow: 0 10px 10px #052659; display: flex; align-items: center; justify-content: center; background: #f0f4f8;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+        </div>
+        <div class="content">
+          <h1 style="font-size: 1rem; font-weight: 800; color: #052659; margin: 0;">오늘일정</h1>
+          <p style="color: #052659; font-weight: 600; font-size: 0.85rem; margin: 0; opacity: 0.7;">0 Tasks</p>
+        </div>
+      </div>
+      <div class="right-icon" style="position: relative; z-index: 4; padding-right: 20px;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#052659" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 24px; height: 24px; opacity: 0.5;">
+          <polyline points="9 18 15 12 9 6"></polyline>
+        </svg>
+      </div>
+    </div><div class="category" style="position: relative; background-color: rgb(255, 255, 255); border-radius: 20px; margin-bottom: 15px; padding: 1.5rem 1rem; display: flex; justify-content: space-between; align-items: center; cursor: pointer; border: 1px solid transparent; background-image: linear-gradient(175deg, rgb(255, 255, 255), rgb(255, 255, 255)), linear-gradient(175deg, rgb(255, 255, 255), rgb(255, 255, 255)); background-origin: border-box; background-clip: padding-box, border-box, border-box; box-shadow: rgba(5, 38, 89, 0.8) 0px 0px 0px; overflow: hidden;">
+      <div class="left" style="position: relative; z-index: 4; display: flex; align-items: center;">
+        <div style="width: 30px; height: 30px; border-radius: 20px; color: #; box-sizing:border-box; padding: 1px !important; margin-right: 15px; box-shadow: 0 10px 10px #052659; display: flex; align-items: center; justify-content: center; background: #f0f4f8;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
+        </div>
+        <div class="content">
+          <h1 style="font-size: 1rem; font-weight: 800; color: #052659; margin: 0;">업무</h1>
+          <p style="color: #052659; font-weight: 600; font-size: 0.85rem; margin: 0; opacity: 0.7;">0 Tasks</p>
+        </div>
+      </div>
+      <div class="right-icon" style="position: relative; z-index: 4; padding-right: 20px;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#052659" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 24px; height: 24px; opacity: 0.5;">
+          <polyline points="9 18 15 12 9 6"></polyline>
+        </svg>
+      </div>
+    </div><div class="category" style="position: relative; background-color: rgb(255, 255, 255); border-radius: 20px; margin-bottom: 15px; padding: 1.5rem 1rem; display: flex; justify-content: space-between; align-items: center; cursor: pointer; border: 1px solid transparent; background-image: linear-gradient(175deg, rgb(255, 255, 255), rgb(255, 255, 255)), linear-gradient(175deg, rgb(255, 255, 255), rgb(255, 255, 255)); background-origin: border-box; background-clip: padding-box, border-box, border-box; box-shadow: rgba(5, 38, 89, 0.8) 0px 0px 0px; overflow: hidden;">
+      <div class="left" style="position: relative; z-index: 4; display: flex; align-items: center;">
+        <div style="width: 30px; height: 30px; border-radius: 20px; color: #; box-sizing:border-box; padding: 1px !important; margin-right: 15px; box-shadow: 0 10px 10px #052659; display: flex; align-items: center; justify-content: center; background: #f0f4f8;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+        </div>
+        <div class="content">
+          <h1 style="font-size: 1rem; font-weight: 800; color: #052659; margin: 0;">쇼핑</h1>
+          <p style="color: #052659; font-weight: 600; font-size: 0.85rem; margin: 0; opacity: 0.7;">0 Tasks</p>
+        </div>
+      </div>
+      <div class="right-icon" style="position: relative; z-index: 4; padding-right: 20px;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#052659" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 24px; height: 24px; opacity: 0.5;">
+          <polyline points="9 18 15 12 9 6"></polyline>
+        </svg>
+      </div>
+    </div><div class="category" style="position: relative; background-color: rgb(255, 255, 255); border-radius: 20px; margin-bottom: 15px; padding: 1.5rem 1rem; display: flex; justify-content: space-between; align-items: center; cursor: pointer; border: 1px solid transparent; background-image: linear-gradient(175deg, rgb(255, 255, 255), rgb(255, 255, 255)), linear-gradient(175deg, rgb(255, 255, 255), rgb(255, 255, 255)); background-origin: border-box; background-clip: padding-box, border-box, border-box; box-shadow: rgba(5, 38, 89, 0.8) 0px 0px 0px; overflow: hidden;">
+      <div class="left" style="position: relative; z-index: 4; display: flex; align-items: center;">
+        <div style="width: 30px; height: 30px; border-radius: 20px; color: #; box-sizing:border-box; padding: 1px !important; margin-right: 15px; box-shadow: 0 10px 10px #052659; display: flex; align-items: center; justify-content: center; background: #f0f4f8;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 11l-5-5-5 5M17 18l-5-5-5 5"></path></svg>
+        </div>
+        <div class="content">
+          <h1 style="font-size: 1rem; font-weight: 800; color: #052659; margin: 0;">자기계발</h1>
+          <p style="color: #052659; font-weight: 600; font-size: 0.85rem; margin: 0; opacity: 0.7;">0 Tasks</p>
+        </div>
+      </div>
+      <div class="right-icon" style="position: relative; z-index: 4; padding-right: 20px;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#052659" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 24px; height: 24px; opacity: 0.5;">
+          <polyline points="9 18 15 12 9 6"></polyline>
+        </svg>
+      </div>
+    </div><div class="category" style="position: relative; background-color: rgb(255, 255, 255); border-radius: 20px; margin-bottom: 15px; padding: 1.5rem 1rem; display: flex; justify-content: space-between; align-items: center; cursor: pointer; border: 1px solid transparent; background-image: linear-gradient(175deg, rgb(255, 255, 255), rgb(255, 255, 255)), linear-gradient(175deg, rgb(255, 255, 255), rgb(255, 255, 255)); background-origin: border-box; background-clip: padding-box, border-box, border-box; box-shadow: rgba(5, 38, 89, 0.8) 0px 0px 0px; overflow: hidden;">
+      <div class="left" style="position: relative; z-index: 4; display: flex; align-items: center;">
+        <div style="width: 30px; height: 30px; border-radius: 20px; color: #; box-sizing:border-box; padding: 1px !important; margin-right: 15px; box-shadow: 0 10px 10px #052659; display: flex; align-items: center; justify-content: center; background: #f0f4f8;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"></path></svg>
+        </div>
+        <div class="content">
+          <h1 style="font-size: 1rem; font-weight: 800; color: #052659; margin: 0;">건강</h1>
+          <p style="color: #052659; font-weight: 600; font-size: 0.85rem; margin: 0; opacity: 0.7;">0 Tasks</p>
+        </div>
+      </div>
+      <div class="right-icon" style="position: relative; z-index: 4; padding-right: 20px;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#052659" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 24px; height: 24px; opacity: 0.5;">
+          <polyline points="9 18 15 12 9 6"></polyline>
+        </svg>
+      </div>
+    </div><div class="category" style="position: relative; background-color: rgb(255, 255, 255); border-radius: 20px; margin-bottom: 15px; padding: 1.5rem 1rem; display: flex; justify-content: space-between; align-items: center; cursor: pointer; border: 1px solid transparent; background-image: linear-gradient(175deg, rgb(255, 255, 255), rgb(255, 255, 255)), linear-gradient(175deg, rgb(255, 255, 255), rgb(255, 255, 255)); background-origin: border-box; background-clip: padding-box, border-box, border-box; box-shadow: rgba(5, 38, 89, 0.8) 0px 0px 0px; overflow: hidden;">
+      <div class="left" style="position: relative; z-index: 4; display: flex; align-items: center;">
+        <div style="width: 30px; height: 30px; border-radius: 20px; color: #; box-sizing:border-box; padding: 1px !important; margin-right: 15px; box-shadow: 0 10px 10px #052659; display: flex; align-items: center; justify-content: center; background: #f0f4f8;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="19" r="3"></circle><line x1="9" y1="16" x2="15" y2="8"></line></svg>
+        </div>
+        <div class="content">
+          <h1 style="font-size: 1rem; font-weight: 800; color: #052659; margin: 0;">운동</h1>
+          <p style="color: #052659; font-weight: 600; font-size: 0.85rem; margin: 0; opacity: 0.7;">0 Tasks</p>
+        </div>
+      </div>
+      <div class="right-icon" style="position: relative; z-index: 4; padding-right: 20px;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#052659" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 24px; height: 24px; opacity: 0.5;">
+          <polyline points="9 18 15 12 9 6"></polyline>
+        </svg>
+      </div>
+    </div><div class="category" style="position: relative; background-color: rgb(255, 255, 255); border-radius: 20px; margin-bottom: 15px; padding: 1.5rem 1rem; display: flex; justify-content: space-between; align-items: center; cursor: pointer; border: 1px solid transparent; background-image: linear-gradient(175deg, rgb(255, 255, 255), rgb(255, 255, 255)), linear-gradient(175deg, rgb(255, 255, 255), rgb(255, 255, 255)); background-origin: border-box; background-clip: padding-box, border-box, border-box; box-shadow: rgba(5, 38, 89, 0.8) 0px 0px 0px; overflow: hidden;">
+      <div class="left" style="position: relative; z-index: 4; display: flex; align-items: center;">
+        <div style="width: 30px; height: 30px; border-radius: 20px; color: #; box-sizing:border-box; padding: 1px !important; margin-right: 15px; box-shadow: 0 10px 10px #052659; display: flex; align-items: center; justify-content: center; background: #f0f4f8;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+        </div>
+        <div class="content">
+          <h1 style="font-size: 1rem; font-weight: 800; color: #052659; margin: 0;">교육</h1>
+          <p style="color: #052659; font-weight: 600; font-size: 0.85rem; margin: 0; opacity: 0.7;">0 Tasks</p>
+        </div>
+      </div>
+      <div class="right-icon" style="position: relative; z-index: 4; padding-right: 20px;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#052659" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 24px; height: 24px; opacity: 0.5;">
+          <polyline points="9 18 15 12 9 6"></polyline>
+        </svg>
+      </div>
+    </div><div class="category" style="position: relative; background-color: rgb(255, 255, 255); border-radius: 20px; margin-bottom: 15px; padding: 1.5rem 1rem; display: flex; justify-content: space-between; align-items: center; cursor: pointer; border: 1px solid transparent; background-image: linear-gradient(175deg, rgb(255, 255, 255), rgb(255, 255, 255)), linear-gradient(175deg, rgb(255, 255, 255), rgb(255, 255, 255)); background-origin: border-box; background-clip: padding-box, border-box, border-box; box-shadow: rgba(5, 38, 89, 0.8) 0px 0px 0px; overflow: hidden;">
+      <div class="left" style="position: relative; z-index: 4; display: flex; align-items: center;">
+        <div style="width: 30px; height: 30px; border-radius: 20px; color: #; box-sizing:border-box; padding: 1px !important; margin-right: 15px; box-shadow: 0 10px 10px #052659; display: flex; align-items: center; justify-content: center; background: #f0f4f8;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+        </div>
+        <div class="content">
+          <h1 style="font-size: 1rem; font-weight: 800; color: #052659; margin: 0;">금융</h1>
+          <p style="color: #052659; font-weight: 600; font-size: 0.85rem; margin: 0; opacity: 0.7;">0 Tasks</p>
+        </div>
+      </div>
+      <div class="right-icon" style="position: relative; z-index: 4; padding-right: 20px;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#052659" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 24px; height: 24px; opacity: 0.5;">
+          <polyline points="9 18 15 12 9 6"></polyline>
+        </svg>
+      </div>
+    </div></div>
+            </div>
+
+            <div class="growth-dashboard">
+                <div class="vertical-ripple-area">
+                    <div class="ripple-card">
+                        <div class="card-label">DAILY</div>
+                        <div class="ripple-wrapper">
+                            <div class="gauge-ticks">
+                                <span class="tick major"></span> <span class="tick"></span>
+                                <span class="tick"></span>
+                                <span class="tick"></span>
+                                <span class="tick major"></span>
+                                <span class="tick major"></span> <span class="tick"></span>
+                                <span class="tick"></span>
+                                <span class="tick"></span>
+                                <span class="tick major"></span>
+                            </div>
+                            <div class="ripple-fill"></div>
+                        </div>
+                        <div class="weekly-percentage" id="weekly-percent-text">0%</div>
+                    </div>
+                    <div class="ripple-card">
+                        <div class="card-label">MONTHLY</div>
+                        <div class="ripple-wrapper">
+                            <div class="gauge-ticks">
+                                <span class="tick major"></span> <span class="tick"></span>
+                                <span class="tick"></span>
+                                <span class="tick"></span>
+                                <span class="tick major"></span>
+                                <span class="tick major"></span> <span class="tick"></span>
+                                <span class="tick"></span>
+                                <span class="tick"></span>
+                                <span class="tick major"></span>
+                            </div>
+
+                            <div class="ripple-fill"></div>
+                        </div>
+                        <div class="card-value">0%</div>
+                    </div>
+                    <div class="ripple-card">
+                        <div class="card-label">TARGET</div>
+                        <div class="ripple-wrapper">
+                            <div class="gauge-ticks">
+                                <span class="tick major"></span> <span class="tick"></span>
+                                <span class="tick"></span>
+                                <span class="tick"></span>
+                                <span class="tick major"></span>
+                                <span class="tick major"></span> <span class="tick"></span>
+                                <span class="tick"></span>
+                                <span class="tick"></span>
+                                <span class="tick major"></span>
+                            </div>
+
+                            <div class="ripple-fill"></div>
+                        </div>
+                        <div class="card-value">0%</div>
+                    </div>
+                </div>
+
+                <div class="wallet-card mechanic-theme" onclick="openFinanceModal()" style="cursor: pointer;">
+                    <div class="wallet-tier tier-top">
+                        <div class="target-unit">
+                            <select id="currency-select" class="symbol-dropdown">
+                                <option value="KRW">₩</option>
+                                <option value="USD">$</option>
+                                <option value="JPY">¥</option>
+                                <option value="CNY">¥</option>
+                            </select>
+                            <input type="text" id="target-amount-display" class="target-input" value="5,000,000" style="pointer-events: none; cursor: default;">1,005,600,000</input>
+                        </div>
+                    </div>
+
+                    <div class="wallet-tier tier-middle">
+                        <div class="mechanic-bar-container">
+                            <div id="progress-bar" class="progress-bar safe-zone" style="width: 0.328162%; background-color: rgb(255, 77, 77);">
+                                <div class="css-gear"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="wallet-tier tier-bottom">
+                        <div class="ic-chip-container">
+                            <img src="./걷다 - 거둬내어 가벼운 삶_files/ic-chip-gold.png" alt="IC Chip" class="ic-chip-img" onerror="this.style.display=&#39;none&#39;; this.nextElementSibling.style.display=&#39;block&#39;;" style="display: none;">
+
+                            <div class="fallback-css-chip" style="display: block;"></div>
+                        </div>
+                        <div class="available-box">
+                            <span class="tiny-label">가용금액</span>
+                            <span id="available-amount-display" class="available-number">3,300,000</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <footer class="bottom-nav">
+                <div class="marquee-container">
+                    <div class="marquee-content" id="marquee-date">
+            <span>토요일 3월 21일 &nbsp; 거둬내어 가벼운 삶 &nbsp; <b>걷다</b> &nbsp;&nbsp;&nbsp;&nbsp;</span>
+            <span>토요일 3월 21일 &nbsp; 거둬내어 가벼운 삶 &nbsp; <b>걷다</b> &nbsp;&nbsp;&nbsp;&nbsp;</span>
+            <span aria-hidden="true">토요일 3월 21일 &nbsp; 거둬내어 가벼운 삶 &nbsp; <b>걷다</b> &nbsp;&nbsp;&nbsp;&nbsp;</span>
+        </div>
+                </div>
+            </footer>
+        </div>
+
+
+        <div class="category-screen screen">
+            <div class="head-wrapper">
+                <div class="back-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 15.75L3 12m0 0l3.75-3.75M3 12h18"></path>
+                    </svg>
+                </div>
+                <div class="categories">
+                    <h2 id="category-title" style="color: #052659; margin-left: 15px;"></h2>
+                </div>
+            </div>
+
+            <div class="category-details">
+                <div id="category-img" class="icon-box"></div>
+                <div class="details">
+                    <p id="num-tasks" style="color: rgb(8, 34, 74); font-weight: 800;">0 Tasks</p>
+                </div>
+            </div>
+
+            <div class="tasks-wrapper">
+                <div class="tasks"></div>
+            </div>
+        </div>
+
+
+        <div class="login-screen screen">
+            <div class="login-container">
+                <div class="head-wrapper">
+                    <div class="back-btn-login">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="15 18 9 12 15 6"></polyline>
+                        </svg>
+                    </div>
+                </div>
+
+                <div class="brand-section">
+                    <h1>걷다</h1>
+                    <p><b>'거둬'</b>내어 가벼운 삶.</p>
+                </div>
+
+                <div id="logged-out-view">
+                    <div class="input-group">
+                        <input type="email" placeholder="이메일" id="user-email">
+                        <input type="password" placeholder="비밀번호" id="user-pw">
+                    </div>
+                    <div class="social-login-divider">
+                        <span>또는 소셜 계정으로 로그인</span>
+                    </div>
+
+                    <div class="social-login-group">
+                        <button class="social-btn google">
+                            <img src="./걷다 - 거둬내어 가벼운 삶_files/googleg_48dp.png" alt="Google">
+                        </button>
+                        <button class="social-btn naver" onclick="handleSocialLogin(&#39;Naver&#39;)" style="background-color: #03C75A !important;">
+                            <i class="fab fa-neos" style="color: white; font-size: 24px;"></i>
+                        </button>
+                        <button class="social-btn kakao">
+                            <img src="./걷다 - 거둬내어 가벼운 삶_files/KakaoTalk_logo.svg" alt="Kakao">
+                        </button>
+                    </div>
+
+                    <button class="login-btn main-login-btn">로그인</button>
+                    <button class="signup-link-btn">
+                        <p>회원가입이 필요하신가요?</p>
+                    </button>
+                </div>
+
+                <div id="logged-in-view" style="display: none;">
+                    <div class="user-profile">
+                        <div class="profile-img">👤</div>
+                        <p class="user-email-display">ifonly1204@gmail.com님</p>
+                    </div>
+                    <button id="logout-btn" class="secondary-btn">로그아웃</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="signup-screen screen">
+            <div class="signup-container">
+                <div class="back-btn-policy">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="15 18 9 12 15 6"></polyline>
+                    </svg>
+                </div>
+                <h3>회원가입</h3>
+
+                <div class="input-group">
+                    <input type="email" id="signup-email" placeholder="이메일 주소">
+                    <input type="password" id="signup-password" placeholder="비밀번호 설정">
+                </div>
+
+                <div class="agreement-group">
+                    <label class="agreement-item">
+                        <input type="checkbox" id="agree-all">
+                        <span class="checkmark"></span>
+                        <p>전체 동의하기</p>
+                    </label>
+                    <div class="divider"></div>
+                    
+                    <div class="divider"></div>
+
+                    <label class="agreement-item">
+                        <input type="checkbox" class="agree-required">
+                        <span class="checkmark"></span>
+                        <p>[필수] 만 14세 이상입니다</p>
+                    </label>
+
+                    <label class="agreement-item">
+                        <input type="checkbox" class="agree-required">
+                        <span class="checkmark"></span>
+                        <p class="policy-trigger" data-type="terms">[필수] 서비스 이용약관 동의</p>
+                    </label>
+
+                    <label class="agreement-item">
+                        <input type="checkbox" class="agree-required">
+                        <span class="checkmark"></span>
+                        <p class="policy-trigger" data-type="privacy">[필수] 개인정보 수집 및 이용 동의</p>
+                    </label>
+
+                    <label class="agreement-item">
+                        <input type="checkbox" id="agree-marketing">
+                        <span class="checkmark"></span>
+                        <p class="policy-trigger" data-type="marketing">[선택] 광고성 정보 수신 동의</p>
+                    </label>
+                </div>
+                <button class="main-signup-btn">회원가입 완료</button>
+            </div>
+        </div>
+
+        <div id="policy-modal">
+            <div class="head-wrapper">
+                <div class="back-btn-policy">
+                </div>
+                <h3 id="policy-detail-title">약관 상세</h3>
+            </div>
+            <div class="policy-text-area">
+                <pre id="policy-text-content"></pre>
+
+                <div class="modal-footer">
+                    <button class="modal-confirm-btn">확인하고 돌아가기</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="welcome-screen" class="screen welcome-screen">
+            <div class="welcome-content">
+                <div class="welcome-icon">✨</div>
+                <h1 id="welcome-user-name">반가워요!</h1>
+                <p>오늘도 가벼운 하루를 시작해볼까요?</p>
+                <div class="loader-bar"></div>
+            </div>
+        </div>
+
+        <div class="add-task-screen">
+            <div class="add-task-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"></path>
+                </svg>
+            </div>
+        </div>
+
+        <div class="black-backdrop"></div>
+
+        <div class="add-task">
+            <button class="back-btn" onclick="toggleAddTask()">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M19 12H5M12 19l-7-7 7-7"></path>
+                </svg>
+            </button>
+            <div class="add-task-backdrop"></div>
+            <h1 class="heading">Add Task</h1>
+
+            <div class="input-group">
+                <label for="task-input">Task</label>
+                <input type="text" id="task-input" placeholder="무엇을 거둬낼까요?" required="">
+            </div>
+
+            <div class="input-group deadline-group">
+                <label>마감 기한 (시간 제한)</label>
+                <div class="datetime-inputs">
+                    <input type="date" id="task-date" required="">
+                    <input type="time" id="task-time" required="">
+                </div>
+                <div class="quick-options">
+                    <button class="quick-btn" onclick="setQuickTime(1)">+1시간</button>
+                    <button class="quick-btn" onclick="setQuickTime(3)">오후 6시</button>
+                    <button class="quick-btn" onclick="setQuickTime(24)">오늘 자정</button>
+                </div>
+            </div>
+
+            <div class="btns">
+                <button class="cancel-btn">Cancel</button>
+                <button class="add-btn" id="add-btn-final">Add</button>
+            </div>
+        </div>
+        <div id="sidebar-overlay" class="overlay">
+
+
+
+        </div>
+
+        <nav id="sidebar" class="sidebar">
+            <div class="sidebar-header">
+                <h2 class="logo">걷다</h2>
+                <button id="close-sidebar">×</button>
+            </div>
+
+            <div class="sidebar-menu-container">
+
+                <div class="menu-divider"></div>
+
+                <div class="menu-divider"></div>
+
+                <div class="menu-label">정보</div>
+                <div class="menu-item policy-link">개인정보처리방침</div>
+                <div class="menu-item terms-link">서비스 이용약관</div>
+                <div class="menu-item version-info">
+                    버전 정보 <span class="version-tag">v1.0.0</span>
+                </div>
+            </div>
+        </nav>
+    </div>
+
+    <div id="app-gatekeeper" class="gatekeeper" style="display: none;">
+        <div class="gatekeeper-content">
+            <h2>🔒 로그인이 필요합니다</h2>
+            <p>기능을 이용하시려면 먼저 로그인해 주세요.</p>
+            <button onclick="goToLogin()">로그인하러 가기</button>
+        </div>
+    </div>
+
+    <div id="finance-modal" class="modal-overlay" onclick="closeFinanceModal(event)" style="display: none;">
+        <div class="modal-content finance-glass-premium" onclick="event.stopPropagation()">
+            <div class="modal-drag-handle"></div>
+
+            <div class="modal-header-v2">
+                <h2 class="modal-title">오늘</h2>
+                <p class="modal-subtitle">"거둬낼수록 삶은 가벼워집니다"</p>
+            </div>
+
+            <div class="input-section-card">
+                <div class="input-group">
+                    <label>무엇을 비울까요?</label>
+                    <input type="text" id="plan-name" placeholder="항목 입력" autocomplete="off">
+                </div>
+                <div class="input-group">
+                    <label>금액</label>
+                    <div class="amount-input-wrapper">
+                        <input type="number" id="plan-amount" placeholder="0" inputmode="numeric">
+                        <span class="currency-unit">₩</span>
+                    </div>
+                </div>
+                <button onclick="addNewPlan()" class="action-btn-premium">거둠</button>
+            </div>
+
+            <div class="list-section">
+                <div class="list-header">
+                    <span>거둠 내역</span>
+                    <span id="items-count">0건</span>
+                </div>
+                <ul id="plan-list-ui" class="plan-list-v2"><li class="plan-item spent">
+            <span>63bld 매입</span>
+            <span>1,000,000,000 ₩</span>
+            
+        </li><li class="plan-item spent">
+            <span>커피</span>
+            <span>300,000 ₩</span>
+            
+        </li><li class="plan-item ">
+            <span>재료비</span>
+            <span>1,000,000 ₩</span>
+            <button onclick="consumePlan(1774099605809)">소비</button>
+        </li><li class="plan-item spent">
+            <span>가맹비</span>
+            <span>2,000,000 ₩</span>
+            
+        </li><li class="plan-item ">
+            <span>세입</span>
+            <span>2,300,000 ₩</span>
+            <button onclick="consumePlan(1774099646209)">소비</button>
+        </li></ul>
+            </div>
+        </div>
+    </div>
+    <script src="./걷다 - 거둬내어 가벼운 삶_files/script.js"></script>
+<!-- Code injected by live-server -->
+<script>
+	// <![CDATA[  <-- For SVG support
+	if ('WebSocket' in window) {
+		(function () {
+			function refreshCSS() {
+				var sheets = [].slice.call(document.getElementsByTagName("link"));
+				var head = document.getElementsByTagName("head")[0];
+				for (var i = 0; i < sheets.length; ++i) {
+					var elem = sheets[i];
+					var parent = elem.parentElement || head;
+					parent.removeChild(elem);
+					var rel = elem.rel;
+					if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
+						var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
+						elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
+					}
+					parent.appendChild(elem);
+				}
+			}
+			var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
+			var address = protocol + window.location.host + window.location.pathname + '/ws';
+			var socket = new WebSocket(address);
+			socket.onmessage = function (msg) {
+				if (msg.data == 'reload') window.location.reload();
+				else if (msg.data == 'refreshcss') refreshCSS();
+			};
+			if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
+				console.log('Live reload enabled.');
+				sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
+			}
+		})();
+	}
+	else {
+		console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
+	}
+	// ]]>
+</script>
+
+<script>
+    function finalForceUpdate() {
+        const now = new Date();
+        const month = now.getMonth() + 1;
+        const date = now.getDate();
+        const dayList = ["일요일", "월요일", "화요일", "수요일", "목요일", "금요일", "토요일"];
+        const dayOfWeek = dayList[now.getDay()];
+
+
+        const newContent = `${dayOfWeek} ${month}월 ${date}일 &nbsp; 거둬내어 가벼운 삶 &nbsp; <b>걷다</b> &nbsp;&nbsp;&nbsp;&nbsp;`;
+
+
+        const marqueeBox = document.querySelector('.marquee-content');
+
+        if (marqueeBox) {
+
+            marqueeBox.innerHTML = `
+            <span>${newContent}</span>
+            <span>${newContent}</span>
+            <span aria-hidden="true">${newContent}</span>
+        `;
+            console.log("🔥 유료의 강제 주입 성공! 3월 20일 확인하세요.");
+        } else {
+            console.log("⚠️ marquee-content 클래스를 찾을 수 없습니다. HTML 구조를 확인해주세요.");
+        }
+    }
+
+
+    setTimeout(finalForceUpdate, 100);
+    setTimeout(finalForceUpdate, 500);
+    setTimeout(finalForceUpdate, 1000);    </script>
+<!-- Code inject--></body></html>

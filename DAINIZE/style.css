@@ -1,0 +1,98 @@
+:root {
+    --main-bg: #f57d49;
+    --accent-dark: #052659;
+}
+
+/* 아이폰 프레임 */
+.iphone-frame {
+    width: 375px;
+    height: 812px;
+    background: var(--main-bg);
+    border: 12px solid #333;
+    border-radius: 60px;
+    position: relative;
+    overflow: hidden;
+    margin: 20px auto;
+}
+
+/* 스크롤 영역 */
+#app-viewport {
+    height: 100%;
+    overflow-y: auto;
+    scrollbar-width: none;
+}
+#app-viewport::-webkit-scrollbar { display: none; }
+
+/* 1. 달력 섹션 (황금비 상단 비율) */
+.calendar-section {
+    min-height: 500px; /* 황금비 0.618 근사치 */
+    padding: 100px 20px 20px;
+    box-sizing: border-box;
+}
+
+/* 2. 고정 가이드라인 (오늘의 일정 제목) */
+.sticky-agenda-header {
+    position: sticky;
+    top: 90px; /* 헤더 바로 아래 고정 */
+    z-index: 800;
+    background: var(--main-bg); /* 리스트를 가리는 불투명 배경 */
+    padding: 20px 25px;
+}
+
+.agenda-title-wrapper {
+    color: white;
+    font-weight: 800;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.agenda-line {
+    flex: 1;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.4);
+}
+
+/* 3. 할 일 섹션 (하단 레이어) */
+.todo-section {
+    position: relative;
+    z-index: 500; /* 가이드라인(800)보다 낮아서 아래로 들어감 */
+    padding: 0 20px 100px;
+}
+
+.todo-app .row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+#input-box {
+    flex: 1;
+    padding: 15px;
+    border-radius: 15px;
+    border: none;
+    background: rgba(255, 255, 255, 0.9);
+}
+
+.todo-app button {
+    padding: 0 20px;
+    background: var(--accent-dark);
+    color: white;
+    border: none;
+    border-radius: 15px;
+    font-weight: bold;
+}
+
+#list-container li {
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    padding: 20px;
+    border-radius: 20px;
+    margin-bottom: 12px;
+    color: white;
+    list-style: none;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+}

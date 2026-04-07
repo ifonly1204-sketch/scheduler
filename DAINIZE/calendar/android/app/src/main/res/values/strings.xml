@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">걷다</string>
+    <string name="title_activity_main">걷다</string>
+    <string name="package_name">com.rokmyeong.walk</string>
+    <string name="custom_url_scheme">com.rokmyeong.walk</string>
+</resources>

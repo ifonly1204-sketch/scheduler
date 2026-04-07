@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gotta - Firebase Sync</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://www.gstatic.com/firebasejs/9.x.x/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.x.x/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.x.x/firebase-storage-compat.js"></script>
+</head>
+<body>
+    <div id="app-container">
+        <div class="glass-card">
+            <div class="image-section">
+                <div id="loader" class="spinner"></div> 
+                <img src="" alt="Gotta Logo" id="main-img" style="display:none;">
+            </div>
+            
+            <div class="content-section">
+                <h1 id="app-title">비워내는 삶, 걷다</h1>
+                <p id="app-desc">데이터를 동기화 중입니다...</p>
+            </div>
+
+            <button class="next-btn" onclick="navigateToNext()">시작하기</button>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
