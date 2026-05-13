@@ -642,6 +642,12 @@
 
         // Firebase auth 전역 노출 (필요시)
         window.auth = auth;
+
+        // 개인정보 처리방침 버튼을 눌렀을 때 실행되는 함수
+        function viewPolicy() {
+            // 같은 폴더에 있는 privacy.html 페이지를 새 탭으로 열어줍니다.
+            window.open('privacy.html', '_blank');
+        }
     </script>
 </body>
 
