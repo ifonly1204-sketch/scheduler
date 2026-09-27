@@ -45,6 +45,14 @@
     flex-direction:column;
     gap:18px;
   }
+  .wrap:fullscreen, .wrap:-webkit-full-screen{
+    max-width:860px;
+    height:100%;
+    justify-content:center;
+    background:var(--bg);
+    padding:24px 16px;
+    overflow:auto;
+  }
   .masthead{
     display:flex;
     align-items:baseline;
@@ -267,7 +275,7 @@
 </style>
 </head>
 <body>
-<div class="wrap">
+<div class="wrap" id="playerWrap">
   <div class="masthead">
     <div>
       <div class="id">ENGLISH MCP · GATE 01</div>
@@ -305,6 +313,7 @@
     <button id="playBtn" class="play" title="재생/일시정지">▶ 시작</button>
     <button id="nextBtn" title="다음 카드">NEXT ▶</button>
     <button id="ttsBtn" title="음성 안내 켜기/끄기">🔊 TTS</button>
+    <button id="fsBtn" title="전체화면으로 보기">⛶ 전체화면</button>
     <div class="scrub">
       <div class="track"><i id="progressBar"></i></div>
       <div class="meta">
@@ -745,6 +754,30 @@
     ttsBtn.disabled = true;
     ttsBtn.textContent = "🔇 TTS 미지원";
     ttsBtn.title = "이 브라우저는 음성 합성을 지원하지 않습니다 — 타임코드로 진행됩니다";
+  }
+
+  // =====================================================================
+  // 6. 전체화면 토글 — 데스크톱 브라우저에서만 지원되는 선택 기능이므로
+  //    실패/미지원은 조용히 무시한다.
+  // =====================================================================
+  var playerWrapEl = document.getElementById("playerWrap");
+  var fsBtn = document.getElementById("fsBtn");
+  var fsSupported = !!(playerWrapEl.requestFullscreen || playerWrapEl.webkitRequestFullscreen);
+  function isFs(){ return !!(document.fullscreenElement || document.webkitFullscreenElement); }
+  function updateFsBtn(){ fsBtn.textContent = isFs() ? "⛶ 전체화면 종료" : "⛶ 전체화면"; }
+  if(fsSupported){
+    fsBtn.addEventListener("click", function(){
+      var req = playerWrapEl.requestFullscreen || playerWrapEl.webkitRequestFullscreen;
+      var exit = document.exitFullscreen || document.webkitExitFullscreen;
+      var p = isFs() ? exit.call(document) : req.call(playerWrapEl);
+      if(p && p.catch) p.catch(function(){});
+    });
+    ["fullscreenchange","webkitfullscreenchange"].forEach(function(ev){
+      document.addEventListener(ev, function(){ updateFsBtn(); scheduleFit(); });
+    });
+  } else {
+    fsBtn.disabled = true;
+    fsBtn.title = "이 환경에서는 전체화면 API를 사용할 수 없습니다";
   }
 
   // 초기 상태: 첫 카드를 정적으로 미리 보여주고, 오디오는 사용자 탭 후 시작
