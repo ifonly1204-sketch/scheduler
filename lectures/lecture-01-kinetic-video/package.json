@@ -6,7 +6,10 @@
   "scripts": {
     "start": "remotion studio src/index.ts",
     "render": "remotion render src/index.ts KineticVideo renders/video.mp4",
-    "still": "remotion still src/index.ts KineticVideo renders/still.png"
+    "still": "remotion still src/index.ts KineticVideo renders/still.png",
+    "audio:generate": "node scripts/generate-audio.mjs",
+    "render:danize": "remotion render src/index.ts DanizeSplitFlap renders/danize-video.mp4",
+    "still:danize": "remotion still src/index.ts DanizeSplitFlap renders/danize-still.png"
   },
   "dependencies": {
     "react": "18.3.1",

@@ -2,6 +2,8 @@ import React from "react";
 import {Composition} from "remotion";
 import {KineticVideo, TRANSITION_FRAMES} from "./KineticVideo";
 import {BEATS, BEAT_FRAMES, FPS} from "./timeline";
+import {DanizeVideo} from "./danize/DanizeVideo";
+import {TOTAL_FRAMES as DANIZE_TOTAL_FRAMES, FPS as DANIZE_FPS} from "./danize/schedule";
 
 // TransitionSeries의 각 크로스페이드 전환은 앞뒤 시퀀스를 그만큼 겹치므로
 // 실제 합성 길이는 비트 프레임 합계에서 전환 구간 총합을 뺀 값이다.
@@ -11,13 +13,23 @@ export const TOTAL_COMPOSITION_FRAMES = rawTotal - overlap;
 
 export const RemotionRoot: React.FC = () => {
   return (
-    <Composition
-      id="KineticVideo"
-      component={KineticVideo}
-      durationInFrames={TOTAL_COMPOSITION_FRAMES}
-      fps={FPS}
-      width={1920}
-      height={1080}
-    />
+    <>
+      <Composition
+        id="KineticVideo"
+        component={KineticVideo}
+        durationInFrames={TOTAL_COMPOSITION_FRAMES}
+        fps={FPS}
+        width={1920}
+        height={1080}
+      />
+      <Composition
+        id="DanizeSplitFlap"
+        component={DanizeVideo}
+        durationInFrames={DANIZE_TOTAL_FRAMES}
+        fps={DANIZE_FPS}
+        width={1920}
+        height={1080}
+      />
+    </>
   );
 };

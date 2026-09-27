@@ -1,0 +1,18 @@
+{
+  "brand": "데이나이즈 영어",
+  "badge": "제 1 강 : 자동사 Intransitive Verbs",
+  "lessonLabel": "LESSON 01 / 10 SENTENCES",
+  "ruleBar": "주어(3인칭·단수) + 현재 시제 ➔ 동사 + -s / 부정문: doesn't + 동사원형",
+  "sentences": [
+    {"kr": "주식이 오른다.", "en": "Stock prices rise.", "highlight": null},
+    {"kr": "금리가 떨어진다.", "en": "The interest rate falls.", "highlight": "falls"},
+    {"kr": "비트코인이 급등한다.", "en": "Bitcoin surges.", "highlight": "surges"},
+    {"kr": "시장이 폭락한다.", "en": "The market plunges.", "highlight": "plunges"},
+    {"kr": "환율이 요동친다.", "en": "Exchange rates fluctuate.", "highlight": null},
+    {"kr": "경제가 회복된다.", "en": "The economy recovers.", "highlight": "recovers"},
+    {"kr": "인플레이션이 둔화된다.", "en": "Inflation slows down.", "highlight": "slows"},
+    {"kr": "부동산 시장이 붕괴한다.", "en": "The housing market collapses.", "highlight": "collapses"},
+    {"kr": "매출이 성장한다.", "en": "Revenue grows.", "highlight": "grows"},
+    {"kr": "그 회사가 부도난다.", "en": "The firm defaults.", "highlight": "defaults"}
+  ]
+}
