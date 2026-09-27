@@ -27,14 +27,15 @@ const RuleBar: React.FC = () => {
       <div
         style={{
           fontFamily: displayFontStack,
-          fontSize: 30,
-          fontWeight: 600,
-          color: "#F59E0B",
-          textShadow: "0 0 22px rgba(245,158,11,0.45)",
-          background: "rgba(15,23,42,0.55)",
+          fontSize: 28,
+          fontWeight: 700,
+          color: "#92700B",
+          background: "rgba(254,243,199,0.75)",
+          backdropFilter: "blur(14px)",
           padding: "14px 36px",
           borderRadius: 999,
-          border: "1px solid rgba(245,158,11,0.3)"
+          border: `1px solid rgba(234,179,8,0.45)`,
+          boxShadow: "0 12px 28px -12px rgba(234,179,8,0.35)"
         }}
       >
         {RULE_TEXT}

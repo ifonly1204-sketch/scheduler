@@ -12,11 +12,18 @@ export type SentenceData = {
   highlight: string | null;
 };
 
+export type SummaryData = {
+  heading: string;
+  body: string;
+  narration: string;
+};
+
 export const BRAND: string = sentencesData.brand;
 export const BADGE: string = sentencesData.badge;
 export const LESSON_LABEL: string = sentencesData.lessonLabel;
 export const RULE_TEXT: string = sentencesData.ruleBar;
 export const SENTENCES: SentenceData[] = sentencesData.sentences;
+export const SUMMARY: SummaryData[] = sentencesData.summary;
 
 function sec(file: string): number {
   const d = (manifest as Record<string, number>)[file];
@@ -90,7 +97,28 @@ export const INTRO_SCENE_FRAMES = Math.max(
   INTRO_BADGE_START + BADGE.length * 2 + 30 + 20
 );
 
-// Scene 3: 클로징(문법 규칙 내레이션 + 브랜드 아웃트로).
-export const CLOSING_SCENE_FRAMES = toFrames(sec("rule.mp3")) + 45;
+// Scene 3: 클로징 요약 3가지 + 브랜드 아웃트로.
+export type SummarySchedule = {
+  index: number;
+  data: SummaryData;
+  audio: string;
+  audioStart: number; // 카드 슬롯 로컬 프레임 기준
+  durationInFrames: number;
+};
+
+const SUMMARY_LEAD_PAD = 10;
+const SUMMARY_TAIL_PAD = 18;
+
+function buildSummarySchedule(index: number, data: SummaryData): SummarySchedule {
+  const audio = `summary-${index}.mp3`;
+  const frames = toFrames(sec(audio));
+  const audioStart = SUMMARY_LEAD_PAD;
+  return {index, data, audio, audioStart, durationInFrames: audioStart + frames + SUMMARY_TAIL_PAD};
+}
+
+export const SUMMARY_SCHEDULE: SummarySchedule[] = SUMMARY.map((s, i) => buildSummarySchedule(i, s));
+export const SUMMARY_SCENE_FRAMES = SUMMARY_SCHEDULE.reduce((a, s) => a + s.durationInFrames, 0);
+export const BRAND_OUTRO_FRAMES = 90; // 요약 뒤 브랜드 클로징 카드
+export const CLOSING_SCENE_FRAMES = SUMMARY_SCENE_FRAMES + BRAND_OUTRO_FRAMES;
 
 export const TOTAL_FRAMES = INTRO_SCENE_FRAMES + LECTURE_SCENE_FRAMES + CLOSING_SCENE_FRAMES;

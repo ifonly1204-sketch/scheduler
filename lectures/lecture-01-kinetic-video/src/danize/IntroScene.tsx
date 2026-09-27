@@ -1,10 +1,12 @@
 import React from "react";
 import {AbsoluteFill, Audio, staticFile, useCurrentFrame} from "remotion";
 import {DanizeBackdrop} from "./DanizeBackdrop";
+import {GlassPanel} from "./GlassPanel";
 import {SplitFlapBoard} from "../splitflap/SplitFlapBoard";
 import {KineticWords} from "../KineticWords";
 import {padCenter} from "../splitflap/pad";
 import {displayFontStack} from "../fonts";
+import {COLORS} from "./theme";
 import {BRAND, BADGE, INTRO_BADGE_START} from "./schedule";
 
 const BADGE_COLUMNS = BADGE.length;
@@ -25,28 +27,30 @@ export const IntroScene: React.FC = () => {
           text={BRAND}
           frame={frame}
           delay={4}
-          fontSize={128}
+          fontSize={116}
           fontFamily={displayFontStack}
-          color="#3B82F6"
+          color={COLORS.english}
           fontWeight={700}
-          textShadow="0 0 40px rgba(59,130,246,0.55)"
+          textShadow="0 12px 32px rgba(29,78,216,0.25)"
           stagger={4}
         />
-        <SplitFlapBoard
-          current={blank}
-          next={badge}
-          columns={BADGE_COLUMNS}
-          triggerFrame={INTRO_BADGE_START}
-          staggerFrames={2}
-          cellWidth={CELL_W}
-          cellHeight={CELL_H}
-          fontSize={30}
-          fontFamily={displayFontStack}
-          currentColor="#F8FAFC"
-          nextColor="#F8FAFC"
-          cardBg="#0F172A"
-          gap={3}
-        />
+        <GlassPanel padding="22px 30px">
+          <SplitFlapBoard
+            current={blank}
+            next={badge}
+            columns={BADGE_COLUMNS}
+            triggerFrame={INTRO_BADGE_START}
+            staggerFrames={2}
+            cellWidth={CELL_W}
+            cellHeight={CELL_H}
+            fontSize={28}
+            fontFamily={displayFontStack}
+            currentColor={COLORS.textDark}
+            nextColor={COLORS.textDark}
+            cardBg={COLORS.cardBg}
+            gap={3}
+          />
+        </GlassPanel>
       </div>
     </AbsoluteFill>
   );

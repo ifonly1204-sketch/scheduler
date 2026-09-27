@@ -1,44 +1,58 @@
 import React from "react";
-import {AbsoluteFill, Audio, interpolate, spring, staticFile, useCurrentFrame, useVideoConfig} from "remotion";
+import {AbsoluteFill, Sequence, interpolate, spring, useCurrentFrame, useVideoConfig} from "remotion";
+import {SummaryCard} from "./SummaryCard";
 import {KineticWords} from "../KineticWords";
 import {displayFontStack} from "../fonts";
-import {BRAND, RULE_TEXT} from "./schedule";
+import {COLORS} from "./theme";
+import {BRAND, SUMMARY_SCHEDULE, BRAND_OUTRO_FRAMES} from "./schedule";
 
-// Scene 3: 문법 규칙을 다시 한 번 크게 강조하며 내레이션하고, 브랜드로 마무리.
-export const ClosingScene: React.FC = () => {
+const BrandOutro: React.FC = () => {
   const frame = useCurrentFrame();
   const {fps} = useVideoConfig();
-
-  const brandProgress = spring({frame: frame - 40, fps, config: {damping: 18}});
-  const brandOpacity = interpolate(brandProgress, [0, 1], [0, 1]);
+  const lineProgress = spring({frame, fps, config: {damping: 20}});
+  const lineWidth = interpolate(lineProgress, [0, 1], [0, 160]);
 
   return (
-    <AbsoluteFill style={{alignItems: "center", justifyContent: "center", gap: 56}}>
-      <Audio src={staticFile("audio/rule.mp3")} />
-      <div style={{display: "flex", flexDirection: "column", alignItems: "center", gap: 56, maxWidth: 1600}}>
+    <AbsoluteFill style={{alignItems: "center", justifyContent: "center", gap: 28}}>
+      <div style={{display: "flex", flexDirection: "column", alignItems: "center", gap: 28}}>
         <KineticWords
-          text={RULE_TEXT}
+          text={BRAND}
           frame={frame}
-          fontSize={48}
+          delay={2}
+          fontSize={104}
           fontFamily={displayFontStack}
-          color="#F59E0B"
+          color={COLORS.english}
           fontWeight={700}
-          textShadow="0 0 30px rgba(245,158,11,0.5)"
-          stagger={2}
+          textShadow="0 12px 32px rgba(29,78,216,0.25)"
+          stagger={4}
         />
-        <div
-          style={{
-            fontFamily: displayFontStack,
-            fontSize: 56,
-            fontWeight: 700,
-            color: "#3B82F6",
-            textShadow: "0 0 40px rgba(59,130,246,0.55)",
-            opacity: brandOpacity
-          }}
-        >
-          {BRAND}
-        </div>
+        <div style={{width: lineWidth, height: 4, borderRadius: 2, background: COLORS.highlight}} />
       </div>
+    </AbsoluteFill>
+  );
+};
+
+// Scene 3: 강의 요약 3가지를 순서대로 보여주고(각각 내레이션과 함께),
+// 마지막에 브랜드로 마무리한다. 인터랙티브 버튼은 넣지 않는다
+// (독립형 MP4 비디오이며 클릭할 수 있는 대상이 아니므로).
+export const ClosingScene: React.FC = () => {
+  let cursor = 0;
+  return (
+    <AbsoluteFill style={{alignItems: "center", justifyContent: "center"}}>
+      {SUMMARY_SCHEDULE.map((schedule) => {
+        const from = cursor;
+        cursor += schedule.durationInFrames;
+        return (
+          <Sequence key={schedule.index} from={from} durationInFrames={schedule.durationInFrames}>
+            <AbsoluteFill style={{alignItems: "center", justifyContent: "center"}}>
+              <SummaryCard schedule={schedule} index={schedule.index} total={SUMMARY_SCHEDULE.length} />
+            </AbsoluteFill>
+          </Sequence>
+        );
+      })}
+      <Sequence from={cursor} durationInFrames={BRAND_OUTRO_FRAMES}>
+        <BrandOutro />
+      </Sequence>
     </AbsoluteFill>
   );
 };

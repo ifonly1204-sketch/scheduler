@@ -108,26 +108,27 @@ export const FlapCell: React.FC<FlapCellProps> = ({
         position: "relative",
         width,
         height,
-        borderRadius: 6,
+        borderRadius: 8,
         boxShadow:
-          "inset 0 2px 4px rgba(255,255,255,0.08), 0 10px 18px -8px rgba(0,0,0,0.7)"
+          "inset 0 1px 2px rgba(15,23,42,0.06), 0 8px 16px -10px rgba(30,41,59,0.35)",
+        border: "1px solid rgba(148,172,209,0.35)"
       }}
     >
       <Half half="top" text={next} color={nextColor} fontFamily={fontFamily} fontSize={fontSize} width={width} height={height} cardBg={cardBg} z={1} />
       <Half half="bottom" text={current} color={currentColor} fontFamily={fontFamily} fontSize={fontSize} width={width} height={height} cardBg={cardBg} z={1} />
       <Half half="top" text={current} color={currentColor} fontFamily={fontFamily} fontSize={fontSize} width={width} height={height} cardBg={cardBg} z={2} rotateDeg={topRotation} />
       <Half half="bottom" text={next} color={nextColor} fontFamily={fontFamily} fontSize={fontSize} width={width} height={height} cardBg={cardBg} z={2} rotateDeg={bottomRotation} />
-      {/* 가운데 경첩 이음선 */}
+      {/* 가운데 경첩 이음선 — 실제 보드의 얇은 크리스(crease) 정도로만,
+          빈 칸(공백)에서도 눈에 띄는 굵은 줄로 보이지 않도록 아주 은은하게 */}
       <div
         style={{
           position: "absolute",
           left: 0,
           right: 0,
-          top: height / 2 - 1,
-          height: 2,
-          background: "#000",
-          zIndex: 3,
-          boxShadow: "0 1px 3px rgba(0,0,0,0.8)"
+          top: height / 2 - 0.5,
+          height: 1,
+          background: "rgba(15,23,42,0.16)",
+          zIndex: 3
         }}
       />
     </div>

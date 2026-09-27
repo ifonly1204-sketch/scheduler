@@ -14,5 +14,22 @@
     {"kr": "부동산 시장이 붕괴한다.", "en": "The housing market collapses.", "highlight": "collapses"},
     {"kr": "매출이 성장한다.", "en": "Revenue grows.", "highlight": "grows"},
     {"kr": "그 회사가 부도난다.", "en": "The firm defaults.", "highlight": "defaults"}
+  ],
+  "summary": [
+    {
+      "heading": "자동사란?",
+      "body": "주어 스스로 동작을 끝내는 동사 — Stock prices rise.",
+      "narration": "자동사란, 주어 스스로 동작을 끝내는 동사입니다. 예를 들어, Stock prices rise."
+    },
+    {
+      "heading": "3인칭 단수 현재 규칙",
+      "body": "주어가 '나·너'를 제외한 하나일 때 동사에 -s, 부정문은 doesn't",
+      "narration": "주어가 나와 너를 제외한 단 하나일 때, 동사에 -s를 붙입니다. 부정문은 doesn't 플러스 동사원형입니다."
+    },
+    {
+      "heading": "현재 시제의 진정한 의미",
+      "body": "과거에도, 지금도, 미래에도 늘 그러한 평소의 상태",
+      "narration": "현재 시제의 진정한 의미는, 과거에도 그랬고 지금도 그러하며 미래에도 늘 그러한, 평소의 상태를 말합니다."
+    }
   ]
 }
