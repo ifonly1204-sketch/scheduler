@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>자동사 디파처보드</title>
+<meta name="description" content="영어MCP 제1강 스크립트를 공항 발착 안내판처럼 재생하는 스플릿플랩 보드입니다.">
+<style>
+  :root{
+    --bg:#0b0d10;
+    --hall:#101317;
+    --board:#15181d;
+    --bezel:#050607;
+    --rivet:#2a2f37;
+    --flap:#1b1f26;
+    --flap-seam:#000000;
+    --ink:#f4efe0;
+    --ink-dim:#7b828c;
+    --sub-ink:#c9d0d8;
+    --accent:#ff8a3d;
+    --accent-dim:#8a4a22;
+    --led-off:#2a1c10;
+    --track:#22262c;
+    --btn:#1c2027;
+    --btn-ink:#e7e2d3;
+    color-scheme: dark;
+  }
+  *{box-sizing:border-box;}
+  html,body{height:100%;margin:0;}
+  body{
+    background:
+      radial-gradient(120% 90% at 50% -10%, #1a1f26 0%, var(--bg) 55%) fixed,
+      var(--bg);
+    color:var(--sub-ink);
+    font-family:'Noto Sans KR','Space Mono',monospace;
+    min-height:100%;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:20px;
+    padding-inline:16px;
+    padding-block:28px 32px;
+  }
+  .wrap{
+    width:100%;
+    max-width:860px;
+    display:flex;
+    flex-direction:column;
+    gap:18px;
+  }
+  .masthead{
+    display:flex;
+    align-items:baseline;
+    justify-content:space-between;
+    gap:12px;
+    flex-wrap:wrap;
+    border-bottom:1px solid #23272f;
+    padding-bottom:14px;
+  }
+  .masthead .id{
+    font-family:'Space Mono',monospace;
+    font-size:12px;
+    letter-spacing:.18em;
+    color:var(--accent);
+    text-transform:uppercase;
+  }
+  .masthead h1{
+    margin:4px 0 0;
+    font-family:'Noto Sans KR',sans-serif;
+    font-weight:700;
+    font-size:clamp(18px,3.6vw,26px);
+    color:var(--ink);
+    text-wrap:balance;
+  }
+  .masthead .clock{
+    font-family:'Space Mono',monospace;
+    font-variant-numeric:tabular-nums;
+    font-size:13px;
+    color:var(--ink-dim);
+    text-align:right;
+  }
+  .clock b{color:var(--sub-ink);font-weight:700;}
+
+  .board-scale-wrap{
+    width:100%;
+    overflow:hidden;
+  }
+  .board{
+    position:relative;
+    display:inline-block;
+    width:max-content;
+    background:linear-gradient(180deg,var(--board),#101317 85%);
+    border:1px solid var(--bezel);
+    border-radius:14px;
+    padding:26px 18px 18px;
+    box-shadow:
+      0 0 0 1px #000 inset,
+      0 30px 60px -25px rgba(0,0,0,.7),
+      0 2px 0 #2a2f37 inset;
+    transform-origin:top left;
+  }
+  .rivet{
+    content:"";
+    position:absolute;
+    width:8px;height:8px;
+    border-radius:50%;
+    background:radial-gradient(circle at 35% 30%,#4a505a,var(--rivet) 60%,#050607);
+  }
+  .rivet.tl{top:10px;left:10px;}
+  .rivet.tr{top:10px;right:10px;}
+  .rivet.bl{bottom:10px;left:10px;}
+  .rivet.br{bottom:10px;right:10px;}
+
+  .board-label{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    font-family:'Space Mono',monospace;
+    font-size:11px;
+    letter-spacing:.14em;
+    color:var(--ink-dim);
+    text-transform:uppercase;
+    margin-bottom:10px;
+  }
+  .board-label .live{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    color:var(--accent);
+  }
+  .live .dot{
+    width:6px;height:6px;border-radius:50%;
+    background:var(--accent);
+    box-shadow:0 0 8px 1px var(--accent);
+  }
+  .live.paused{color:var(--ink-dim);}
+  .live.paused .dot{background:var(--ink-dim);box-shadow:none;}
+
+  .row{
+    display:grid;
+    grid-auto-flow:column;
+    grid-auto-columns:var(--flap-w);
+    gap:3px;
+  }
+  .row + .row{margin-top:6px;}
+  .row.primary{--flap-w:19px;--flap-h:42px;--flap-fs:21px;}
+  .row.secondary{--flap-w:12px;--flap-h:25px;--flap-fs:13px;}
+
+  .flap{
+    position:relative;
+    height:var(--flap-h);
+    background:var(--flap);
+    border-radius:3px;
+    overflow:hidden;
+    perspective:220px;
+    box-shadow:0 1px 0 rgba(255,255,255,.04) inset, 0 -1px 0 rgba(0,0,0,.6) inset;
+  }
+  .flap::after{
+    content:"";
+    position:absolute;
+    left:0;right:0;top:calc(50% - .5px);
+    height:1px;
+    background:var(--flap-seam);
+    z-index:5;
+  }
+  .flap .face{
+    position:absolute;
+    inset:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-family:'Space Mono','Noto Sans KR',monospace;
+    font-weight:700;
+    font-size:var(--flap-fs);
+    color:var(--ink);
+    backface-visibility:hidden;
+    background:var(--flap);
+  }
+  .row.secondary .face{color:var(--sub-ink);font-weight:500;}
+  .flap .face.back{transform:rotateX(180deg);}
+  .flap .card{
+    position:absolute;inset:0;
+    transform-style:preserve-3d;
+    transition:transform .32s cubic-bezier(.4,0,.2,1);
+  }
+  .flap .card.flip{transform:rotateX(-180deg);}
+  .flap .card.no-anim{transition:none;}
+
+  .transport{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    flex-wrap:wrap;
+  }
+  .transport button{
+    font-family:'Space Mono',monospace;
+    font-size:13px;
+    letter-spacing:.04em;
+    color:var(--btn-ink);
+    background:linear-gradient(180deg,#22262d,var(--btn));
+    border:1px solid #2c313a;
+    border-radius:8px;
+    padding:9px 14px;
+    cursor:pointer;
+    box-shadow:0 1px 0 rgba(255,255,255,.05) inset, 0 2px 3px rgba(0,0,0,.4);
+  }
+  .transport button:hover{border-color:var(--accent-dim);}
+  .transport button:active{transform:translateY(1px);}
+  .transport button.play{color:var(--accent);border-color:var(--accent-dim);}
+  .transport .scrub{
+    flex:1;
+    min-width:120px;
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+  }
+  .transport .track{
+    height:4px;
+    border-radius:2px;
+    background:var(--track);
+    overflow:hidden;
+  }
+  .transport .track > i{
+    display:block;
+    height:100%;
+    width:0%;
+    background:linear-gradient(90deg,var(--accent-dim),var(--accent));
+  }
+  .transport .meta{
+    display:flex;
+    justify-content:space-between;
+    font-family:'Space Mono',monospace;
+    font-variant-numeric:tabular-nums;
+    font-size:11px;
+    color:var(--ink-dim);
+  }
+  .transport .meta .tag{
+    color:var(--accent);
+    text-transform:uppercase;
+    letter-spacing:.08em;
+  }
+
+  .legend{
+    font-size:12px;
+    color:var(--ink-dim);
+    text-align:center;
+    line-height:1.6;
+  }
+  .legend b{color:var(--sub-ink);}
+
+  @media (prefers-reduced-motion: reduce){
+    .flap .card{transition:none;}
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <div class="masthead">
+    <div>
+      <div class="id">ENGLISH MCP · GATE 01</div>
+      <h1>자동사 &amp; 3인칭 단수의 비밀</h1>
+    </div>
+    <div class="clock">SCHEDULED<br><b id="etaClock">00:00</b></div>
+  </div>
+
+  <div class="board-scale-wrap" id="boardWrap">
+    <div class="board" id="board">
+      <span class="rivet tl"></span><span class="rivet tr"></span>
+      <span class="rivet bl"></span><span class="rivet br"></span>
+      <div class="board-label">
+        <span>DEPARTURE · LESSON 01</span>
+        <span class="live" id="liveTag"><span class="dot"></span>ON AIR</span>
+      </div>
+      <div class="row primary" id="row1"></div>
+      <div class="row secondary" id="row2"></div>
+    </div>
+  </div>
+
+  <div class="transport">
+    <button id="prevBtn" title="이전 문장">◀ PREV</button>
+    <button id="playBtn" class="play" title="재생/정지">❚❚ PAUSE</button>
+    <button id="nextBtn" title="다음 문장">NEXT ▶</button>
+    <div class="scrub">
+      <div class="track"><i id="progressBar"></i></div>
+      <div class="meta">
+        <span class="tag" id="slideTag">TITLE</span>
+        <span id="counter">1 / 1</span>
+      </div>
+    </div>
+  </div>
+
+  <p class="legend"><b>자동 재생 중</b>입니다 · 각 문장이 표시되는 시간은 글자 수에 맞춰 자동으로 계산됩니다 · PREV/NEXT로 직접 넘겨보세요</p>
+</div>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Noto+Sans+KR:wght@400;500;700&display=swap">
+
+<script>
+(function(){
+  "use strict";
+
+  // ---- 강의 스크립트 (영어MCP 제1강) -------------------------------
+  var V = [
+    ["Rise","오르다","Stock prices","Stock prices rise.","주가가 오른다","Stock prices don't rise.","주가가 안 오른다","Do stock prices rise?","주가가 오르나요?"],
+    ["Fall","떨어지다","The interest rate","The interest rate falls.","금리가 떨어진다","The interest rate doesn't fall.","금리가 안 떨어진다","Does the interest rate fall?","금리가 떨어지나요?"],
+    ["Surge","급등하다","Bitcoin","Bitcoin surges.","비트코인이 급등한다","Bitcoin doesn't surge.","비트코인이 급등하지 않는다","Does Bitcoin surge?","비트코인이 급등하나요?"],
+    ["Plunge","폭락하다","The market","The market plunges.","시장이 폭락한다","The market doesn't plunge.","시장이 폭락하지 않는다","Does the market plunge?","시장이 폭락하나요?"],
+    ["Fluctuate","요동치다","Exchange rates","Exchange rates fluctuate.","환율이 요동친다","Exchange rates don't fluctuate.","환율이 요동치지 않는다","Do exchange rates fluctuate?","환율이 요동치나요?"],
+    ["Recover","회복되다","The economy","The economy recovers.","경제가 회복된다","The economy doesn't recover.","경제가 회복되지 않는다","Does the economy recover?","경제가 회복되나요?"],
+    ["Slow down","둔화되다","Inflation","Inflation slows down.","인플레이션이 둔화된다","Inflation doesn't slow down.","인플레이션이 둔화되지 않는다","Does inflation slow down?","인플레이션이 둔화되나요?"],
+    ["Collapse","붕괴하다","The housing market","The housing market collapses.","부동산 시장이 붕괴한다","The housing market doesn't collapse.","부동산 시장이 붕괴하지 않는다","Does the housing market collapse?","부동산 시장이 붕괴하나요?"],
+    ["Grow","성장하다","Revenue","Revenue grows.","매출이 성장한다","Revenue doesn't grow.","매출이 성장하지 않는다","Does revenue grow?","매출이 성장하나요?"],
+    ["Default","부도나다","The firm","The firm defaults.","그 회사가 부도난다","The firm doesn't default.","그 회사가 부도나지 않는다","Does the firm default?","그 회사가 부도나나요?"]
+  ];
+
+  function S(row1,row2,tag,extra){
+    var s = {row1:row1, row2:row2 || "", tag:tag || ""};
+    if(extra) Object.assign(s, extra);
+    return s;
+  }
+
+  var SLIDES = [
+    S("[영어MCP] 제1강","자동사 & 3인칭 단수의 비밀","TITLE",{duration:4.5}),
+
+    S("1. 자동사","딱 두 단어로 완성되는 문장","SEC.1",{duration:3.2}),
+    S("Stock prices rise.","주식이 오른다.","EX 1/5"),
+    S("Wind blows.","바람이 분다.","EX 2/5"),
+    S("Petals flutter.","꽃잎이 흩날린다.","EX 3/5"),
+    S("The luck comes.","복이 들어온다.","EX 4/5"),
+    S("Exchange rate fluctuates.","환율이 요동치네…","EX 5/5"),
+    S("주어 + 동사","자동사 = 스스로 동작을 완성하는 동사","KEY",{duration:4}),
+
+    S("2. 3인칭 단수 현재","영어의 유일한 귀찮은 규칙","SEC.2",{duration:3.2}),
+    S("3인칭 단수 + 현재","동사 + -s, 부정은 doesn't","RULE",{duration:4}),
+    S("나, 너 빼고 전부","= 3인칭","RULE",{duration:3.4}),
+
+    S("3. 현재 시제의 진짜 의미","단순한 지금이 아니라 '늘 그러함'","SEC.3",{duration:3.6}),
+    S("I love you.","현재 — 늘 사랑해 (진심)","TENSE"),
+    S("I loved you.","과거 — 지금은 아니야","TENSE"),
+    S("I will love you.","미래 — 아직은 아니야","TENSE"),
+    S("3인칭 단수 + 현재","동사 뒤에 -s","RECAP",{duration:3.4}),
+
+    S("4. 돌발 퀴즈","인칭 구분 완벽 정리","SEC.4",{duration:3.2}),
+    S("나의 친구 = ? 인칭","Q1","QUIZ",{duration:3.6}),
+    S("정답: 3인칭","'나'가 아니라 '친구'니까","QUIZ",{duration:3.8}),
+    S("너의 꿈 = ? 인칭","Q2","QUIZ",{duration:3.6}),
+    S("정답: 3인칭","'너'가 아니라 '꿈'이니까","QUIZ",{duration:3.8}),
+    S("I run.","나 — 1인칭","PRONOUN"),
+    S("You run.","너 — 2인칭","PRONOUN"),
+    S("He runs.","그 — 3인칭 단수","PRONOUN"),
+    S("My friend runs.","내 친구 — 3인칭 단수","PRONOUN"),
+
+    S("5. 부정문 만드는 법","-s의 변신","SEC.5",{duration:3.2}),
+    S("I don't run.","나는 안 뛴다","NEG"),
+    S("He doesn't run.","그는 안 뛴다","NEG"),
+
+    S("6. 실전 연습","자동사 10선","SEC.6",{duration:3.2})
+  ];
+
+  V.forEach(function(v,i){
+    var n = String(i+1).padStart(2,"0");
+    SLIDES.push(S(n+". "+v[0], v[1]+" — "+v[2], "PRACTICE",{duration:3.4}));
+    SLIDES.push(S(v[3], v[4], "긍정문"));
+    SLIDES.push(S(v[5], v[6], "부정문"));
+    SLIDES.push(S(v[7], v[8], "의문문"));
+  });
+
+  SLIDES.push(S("THE END","1형식 자동사 + 3인칭 단수 완전정복!","FIN",{duration:5}));
+
+  // ---- 타이밍: 문장 길이에 비례해 표시 시간을 자동 계산 -------------
+  function calcDuration(s){
+    if (s.duration) return s.duration;
+    var len = s.row1.length + s.row2.length;
+    return Math.min(6.5, Math.max(2.6, 1.3 + len * 0.052));
+  }
+  SLIDES.forEach(function(s){ s.duration = calcDuration(s); });
+
+  var TOTAL_MS = SLIDES.reduce(function(a,s){return a + s.duration*1000;}, 0);
+
+  // ---- 플랩보드 렌더링 ----------------------------------------------
+  var ROW1_LEN = Math.min(38, Math.max.apply(null, SLIDES.map(function(s){return s.row1.length;})));
+  var ROW2_LEN = Math.min(46, Math.max.apply(null, SLIDES.map(function(s){return s.row2.length;})));
+  var SPIN_POOL = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 .,'-?";
+
+  function pad(str,len){
+    str = (str||"").slice(0,len);
+    var total = len - str.length;
+    var left = Math.floor(total/2), right = total-left;
+    return " ".repeat(left)+str+" ".repeat(right);
+  }
+  function randChar(){ return SPIN_POOL[Math.floor(Math.random()*SPIN_POOL.length)]; }
+
+  function buildRow(el,len){
+    el.innerHTML = "";
+    var flaps = [];
+    for(var i=0;i<len;i++){
+      var flap = document.createElement("div");
+      flap.className = "flap";
+      flap.innerHTML =
+        '<div class="card"><div class="face front">&nbsp;</div><div class="face back">&nbsp;</div></div>';
+      el.appendChild(flap);
+      flaps.push({
+        el:flap,
+        card:flap.querySelector(".card"),
+        front:flap.querySelector(".front"),
+        back:flap.querySelector(".back"),
+        current:" ",
+        target:" ",
+        gen:0
+      });
+    }
+    return flaps;
+  }
+
+  var row1El = document.getElementById("row1");
+  var row2El = document.getElementById("row2");
+  var flaps1 = buildRow(row1El, ROW1_LEN);
+  var flaps2 = buildRow(row2El, ROW2_LEN);
+
+  // The board has a fixed, desktop-sized flap grid (so every glyph keeps its
+  // proportions). On a narrower viewport we scale the whole panel down
+  // uniformly instead of squeezing individual flaps, which is what kept
+  // Hangul glyphs legible even at phone width.
+  var boardEl = document.getElementById("board");
+  var boardWrapEl = document.getElementById("boardWrap");
+  function fitBoard(){
+    boardEl.style.transform = "none";
+    var naturalW = boardEl.offsetWidth;
+    var naturalH = boardEl.offsetHeight;
+    var avail = boardWrapEl.clientWidth;
+    var scale = Math.min(1, avail / naturalW);
+    boardEl.style.transform = scale < 1 ? "scale(" + scale.toFixed(4) + ")" : "none";
+    boardWrapEl.style.height = Math.ceil(naturalH * scale) + "px";
+  }
+  var fitPending = false;
+  function scheduleFit(){
+    if(fitPending) return;
+    fitPending = true;
+    requestAnimationFrame(function(){ fitPending = false; fitBoard(); });
+  }
+  scheduleFit();
+  window.addEventListener("resize", scheduleFit);
+  if(document.fonts && document.fonts.ready){ document.fonts.ready.then(scheduleFit); }
+
+  function setFlapImmediate(f,ch){
+    f.current = ch;
+    f.front.textContent = ch;
+    f.back.textContent = ch;
+    f.card.classList.remove("flip");
+  }
+
+  function flipFlap(f,target,delay,spins){
+    var myGen = ++f.gen;
+    var seq = [];
+    for(var i=0;i<spins;i++) seq.push(randChar());
+    seq.push(target);
+    var step = 0;
+    function next(){
+      if(f.gen !== myGen) return; // superseded by a newer render
+      if(f.current === seq[step] && step < seq.length-1){ step++; }
+      var ch = seq[step];
+      if(ch === f.current){
+        if(step < seq.length-1){ step++; next(); }
+        return;
+      }
+      f.back.textContent = ch;
+      f.card.classList.add("no-anim");
+      void f.card.offsetWidth;
+      f.card.classList.remove("no-anim");
+      requestAnimationFrame(function(){
+        if(f.gen !== myGen) return;
+        f.card.classList.add("flip");
+      });
+      setTimeout(function(){
+        if(f.gen !== myGen) return;
+        f.card.classList.add("no-anim");
+        f.card.classList.remove("flip");
+        f.front.textContent = ch;
+        f.current = ch;
+        void f.card.offsetWidth;
+        f.card.classList.remove("no-anim");
+        step++;
+        if(step < seq.length){
+          setTimeout(next, 170);
+        }
+      }, 320);
+    }
+    setTimeout(next, delay);
+  }
+
+  var reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  function renderRow(flaps,text,len){
+    var padded = pad(text,len);
+    for(var i=0;i<flaps.length;i++){
+      var target = padded[i] || " ";
+      var f = flaps[i];
+      if(target === f.target) continue;
+      f.target = target;
+      if(reduceMotion){
+        f.gen++;
+        setFlapImmediate(f,target);
+      } else {
+        var delay = i * 14;
+        var spins = 1 + Math.floor(Math.random()*2);
+        flipFlap(f,target,delay,spins);
+      }
+    }
+  }
+
+  // ---- 재생 컨트롤 ----------------------------------------------
+  var idx = 0, playing = true, slideStart = 0, rafId = null, timerId = null;
+  var etaEl = document.getElementById("etaClock");
+  var liveTag = document.getElementById("liveTag");
+  var progressBar = document.getElementById("progressBar");
+  var counterEl = document.getElementById("counter");
+  var slideTagEl = document.getElementById("slideTag");
+  var playBtn = document.getElementById("playBtn");
+
+  function fmtClock(ms){
+    var total = Math.round(ms/1000);
+    var m = Math.floor(total/60), s = total%60;
+    return String(m).padStart(2,"0")+":"+String(s).padStart(2,"0");
+  }
+
+  function showSlide(i){
+    idx = ((i % SLIDES.length) + SLIDES.length) % SLIDES.length;
+    var s = SLIDES[idx];
+    renderRow(flaps1, s.row1, ROW1_LEN);
+    renderRow(flaps2, s.row2, ROW2_LEN);
+    slideTagEl.textContent = s.tag || "—";
+    counterEl.textContent = (idx+1)+" / "+SLIDES.length;
+    slideStart = performance.now();
+    var elapsedBefore = SLIDES.slice(0,idx).reduce(function(a,x){return a+x.duration*1000;},0);
+    etaEl.textContent = fmtClock(elapsedBefore) + " / " + fmtClock(TOTAL_MS);
+    clearTimeout(timerId);
+    if(playing){
+      timerId = setTimeout(function(){ showSlide(idx+1); }, s.duration*1000);
+    }
+  }
+
+  function tick(){
+    var s = SLIDES[idx];
+    var elapsed = performance.now() - slideStart;
+    var pct = Math.min(100, (elapsed/(s.duration*1000))*100);
+    progressBar.style.width = pct+"%";
+    rafId = requestAnimationFrame(tick);
+  }
+  rafId = requestAnimationFrame(tick);
+
+  function setPlaying(p){
+    playing = p;
+    liveTag.classList.toggle("paused", !playing);
+    liveTag.innerHTML = playing
+      ? '<span class="dot"></span>ON AIR'
+      : '<span class="dot"></span>PAUSED';
+    playBtn.textContent = playing ? "❚❚ PAUSE" : "▶ PLAY";
+    clearTimeout(timerId);
+    if(playing){
+      var s = SLIDES[idx];
+      var remain = Math.max(200, s.duration*1000 - (performance.now()-slideStart));
+      timerId = setTimeout(function(){ showSlide(idx+1); }, remain);
+    }
+  }
+
+  document.getElementById("playBtn").addEventListener("click", function(){ setPlaying(!playing); });
+  document.getElementById("nextBtn").addEventListener("click", function(){ showSlide(idx+1); });
+  document.getElementById("prevBtn").addEventListener("click", function(){ showSlide(idx-1); });
+
+  showSlide(0);
+})();
+</script>
+</body>
+</html>
